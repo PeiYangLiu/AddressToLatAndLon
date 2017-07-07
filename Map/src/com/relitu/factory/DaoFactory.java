@@ -10,7 +10,7 @@ public class DaoFactory implements DaoFactoryInter {
 			String password, String sid) {
 		return new PHIS_HOUSE_ATTRIBUTE_COUNT_Dao(num, city, user, password, sid);
 	}
-
+ 
 	@Override
 	public PHIS_HOUSE_KUANXUAN_Dao createPHIS_HOUSE_KUANXUAN_Dao(int num, String city, String user, String password,
 			String sid) {

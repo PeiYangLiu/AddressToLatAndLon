@@ -10,7 +10,7 @@ import java.util.Date;
 public class PHIS_HOUSE_ATTRIBUTE_COUNT {
 	private String ID;
 	private String lng;
-	private String lat;
+	private String lat; 
 	private Date date;
 	private String HS_SIT;
 

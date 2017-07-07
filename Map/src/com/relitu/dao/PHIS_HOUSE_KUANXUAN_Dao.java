@@ -11,7 +11,7 @@ import com.relitu.domain.PHIS_HOUSE_KUANXUAN;
 public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUANXUAN_Inter {
 	private PHIS_HOUSE_KUANXUAN[] list;
 
-	/**
+	/** 
 	 * 
 	 * @param num
 	 *            : 需要进行地址转换的条目数量
