@@ -16,5 +16,5 @@ public abstract class BasicDao implements BasicDaoInter {
 	public String key = "kVz95Ivg9aZAwgNH2faaEitbcoTjZg49";
 	public String Oracle_user;
 	public String Oracle_password;
-	public String Oracle_sid; 
+	public String Oracle_sid;  
 }
