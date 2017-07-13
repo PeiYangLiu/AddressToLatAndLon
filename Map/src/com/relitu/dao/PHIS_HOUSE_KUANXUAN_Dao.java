@@ -1,5 +1,9 @@
 package com.relitu.dao;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,11 +11,12 @@ import java.sql.SQLException;
 import com.relitu.basic.BasicDao;
 import com.relitu.dao.inter.PHIS_HOUSE_KUANXUAN_Inter;
 import com.relitu.domain.PHIS_HOUSE_KUANXUAN;
+import com.relitu.tools.GetLocation;
 
 public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUANXUAN_Inter {
 	private PHIS_HOUSE_KUANXUAN[] list;
 
-	/** 
+	/**
 	 * 
 	 * @param num
 	 *            : 需要进行地址转换的条目数量
@@ -33,48 +38,28 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		this.list = new PHIS_HOUSE_KUANXUAN[num];
 	}
 
-	private PHIS_HOUSE_KUANXUAN getPoint(PHIS_HOUSE_KUANXUAN ad) {// 调用百度地图geocoding服务,将街道地址转换为经纬度
-		try {
-			java.io.InputStream l_urlStream;
-			// java.net.URL l_url = new
-			// java.net.URL("http://api.map.baidu.com/geocoder/v2/?address=" +
-			// ad.getHS_SIT()
-			// +
-			// "&output=json&ak=b4OUeObBmhFvLFd2foTStEtvIRNuR8M8&callback=showLocation");
-//			java.net.URL l_url = new java.net.URL(
-//					"http://api.map.baidu.com/geocoder/v2/?address=" + URLEncoder.encode(ad.getHS_SIT(), "UTF-8")
-//							+ "&output=json&ak=" + this.key + "&callback=showLocation");
-			 String url = "http://api.map.baidu.com/geocoder/v2/?address=" +
-			 URLEncoder.encode(ad.getHS_SIT(),"UTF-8") + "&output=json&ak="
-			 + this.key + "&callback=showLocation";
-//			 System.out.println(url);
-			java.net.URL l_url = new java.net.URL(url);// 创建URL
-			java.net.HttpURLConnection l_connection = (java.net.HttpURLConnection) l_url.openConnection();// 打开URL
-			l_connection.connect();// 连接URL
-			l_urlStream = l_connection.getInputStream();
-			java.io.BufferedReader l_reader = new java.io.BufferedReader(new java.io.InputStreamReader(l_urlStream));
-			String str = l_reader.readLine();
-			System.out.println(str);
-			// 用经度分割返回的网页代码
-			if (str == null || str.contains("\"status\":1"))// 出错返回
-				return null;
-			// 将返回的字符串进行分割M,提取经纬度
-			String s = "," + "\"" + "lat" + "\"" + ":";
-			String strs[] = str.split(s, 2);
-			String s1 = "\"" + "lng" + "\"" + ":";
-			String a[] = strs[0].split(s1, 2);
-			ad.setLNG(a[1]);
-			// System.out.println(a[1]);//lng
-			s1 = "}" + "," + "\"";
-			String a1[] = strs[1].split(s1, 2);
-			ad.setLAT(a1[0]);
-			// System.out.println(a1[0]);//lat
+	private URL getURLByHS_SIT(PHIS_HOUSE_KUANXUAN ad) throws Exception {
+		URL l_url = new URL(
+				"http://api.map.baidu.com/geocoder/v2/?address=" + URLEncoder.encode(ad.getHS_SIT(), "UTF-8")
+						+ "&output=json&ak=" + this.key + "&callback=showLocation");
+		return l_url;
+	}
 
-		} catch (Exception e) {// 出现异常返回空
-			e.printStackTrace();
-			return null;
-		}
-		return ad;
+	private URL getURLByStreet(PHIS_HOUSE_KUANXUAN ad) throws Exception {
+		String url = "http://api.map.baidu.com/geocoder/v2/?address="
+				+ URLEncoder.encode(this.city + ad.getHS_REGION_CODE() + ad.getHS_SIT_STREET(), "UTF-8")
+				+ "&output=json&ak=" + this.key + "&callback=showLocation";
+		return new URL(url);
+	}
+
+	private PHIS_HOUSE_KUANXUAN getPoint(PHIS_HOUSE_KUANXUAN ad, URL l_url) throws Exception {// 调用百度地图geocoding服务,将街道地址转换为经纬度
+		InputStream l_urlStream;
+		HttpURLConnection l_connection = (HttpURLConnection) l_url.openConnection();// 打开URL
+		l_connection.connect();// 连接URL
+		l_urlStream = l_connection.getInputStream();
+		BufferedReader l_reader = new BufferedReader(new java.io.InputStreamReader(l_urlStream));
+		String str = l_reader.readLine();
+		return GetLocation.getLocationFromAction(str, ad);
 	}
 
 	private void Connect() {// 连接数据库
@@ -93,18 +78,20 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 	private void Select() {
 		try {
 			System.out.println("连接成功！");
-			String sql = "select HS_NUM,HS_COCITY_CODE,HS_SIT from PHIS_HOUSE_KUANXUAN where lng is null and HS_SIT is not null and rownum<="
-					+ num;// 预编译语句
+			String sql = "select HS_SIT,HS_NUM,HS_COCITY_CODE,HS_REGION_CODE,HS_SIT_STREET,HS_SIT_BUILDING from PHIS_HOUSE_KUANXUAN where lng is null and HS_SIT is not null and HS_COCITY_CODE = '440600' and rownum<="
+					+ num;
 			pre = con.prepareStatement(sql);// 实例化预编译语句
 			result = pre.executeQuery();// 执行查询，注意括号中不需要再加参数
 			int i = 0;
 			while (result.next()) {
 				// 当结果集不为空时
-				// System.out.println(result.getString("HS_SIT"));
 				PHIS_HOUSE_KUANXUAN temp = new PHIS_HOUSE_KUANXUAN();
 				temp.setHS_NUM(result.getString("HS_NUM"));
 				temp.setHS_SIT(result.getString("HS_SIT"));
 				temp.setHS_COCITY_CODE(result.getString("HS_COCITY_CODE"));
+				temp.setHS_REGION_CODE(result.getString("HS_REGION_CODE"));
+				temp.setHS_SIT_STREET(result.getString("HS_SIT_STREET"));
+				temp.setHS_SIT_BUILDING(result.getString("HS_SIT_BUILDING"));
 				list[i] = temp;
 				i++;
 			}
@@ -144,7 +131,14 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		this.Connect();
 		this.Select();
 		for (int i = 0; i < list.length; i++) {
-			PHIS_HOUSE_KUANXUAN temp = this.getPoint(list[i]);
+			PHIS_HOUSE_KUANXUAN temp = null;
+			try {
+				temp = this.getPoint(list[i], getURLByHS_SIT(list[i]));
+				if (temp == null)
+					temp = this.getPoint(list[i], getURLByStreet(list[i]));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			if (temp == null || temp.getLAT().equals("null"))
 				continue;
 			this.Save(temp);

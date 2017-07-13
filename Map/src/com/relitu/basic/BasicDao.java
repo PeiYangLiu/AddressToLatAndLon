@@ -13,7 +13,7 @@ public abstract class BasicDao implements BasicDaoInter {
 	public ResultSet result = null;// 创建一个结果集对象
 	public String city;
 	//public String key = "kVz95Ivg9aZAwgNH2faaEitbcoTjZg49";b4OUeObBmhFvLFd2foTStEtvIRNuR8M8// 调用百度地图API必须得有key
-	public String key = "kVz95Ivg9aZAwgNH2faaEitbcoTjZg49";
+	public String key = "b4OUeObBmhFvLFd2foTStEtvIRNuR8M8";
 	public String Oracle_user;
 	public String Oracle_password;
 	public String Oracle_sid;  

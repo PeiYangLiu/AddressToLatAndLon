@@ -1,9 +1,5 @@
 package com.relitu.main;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.relitu.dao.factory.inter.DaoFactoryInter;
 import com.relitu.factory.DaoFactory;
 
@@ -14,11 +10,7 @@ import com.relitu.factory.DaoFactory;
  */ 
 public class Main {
 	public static void main(String[] args) {
-		// new PHIS_HOUSE_ATTRIBUTE_COUNT_Dao(10, "深圳", "gsms_416", "123456",
-		// "orcl").doChange();
 		DaoFactoryInter factory = new DaoFactory();
-		// factory.createPHIS_HOUSE_ATTRIBUTE_COUNT_Dao(100, "深圳", "gsms_416",
-		// "123456", "orcl").doChange();
-		factory.createPHIS_HOUSE_KUANXUAN_Dao(100, "", "gsms_416", "123456", "orcl").doChange();
+		factory.createPHIS_HOUSE_KUANXUAN_Dao(30000, "佛山市", "gsms_416", "123456", "orcl").doChange();
 	}
 }
