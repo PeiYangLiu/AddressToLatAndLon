@@ -13,6 +13,11 @@ import com.relitu.dao.inter.PHIS_HOUSE_KUANXUAN_Inter;
 import com.relitu.domain.PHIS_HOUSE_KUANXUAN;
 import com.relitu.tools.GetLocation;
 
+/**
+ * @author : PeiYangLiu
+ * @version: 2.0
+ * @date: 2017/7/13
+ */
 public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUANXUAN_Inter {
 	private PHIS_HOUSE_KUANXUAN[] list;
 
@@ -38,6 +43,13 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		this.list = new PHIS_HOUSE_KUANXUAN[num];
 	}
 
+	/**
+	 * 
+	 * @param ad
+	 *            : 需要通过百度地图API解析的PHIS_HOUSE_KUANXUAN对象
+	 * @return : 连接百度地图API的URL
+	 * @throws Exception
+	 */
 	private URL getURLByHS_SIT(PHIS_HOUSE_KUANXUAN ad) throws Exception {
 		URL l_url = new URL(
 				"http://api.map.baidu.com/geocoder/v2/?address=" + URLEncoder.encode(ad.getHS_SIT(), "UTF-8")
@@ -45,6 +57,13 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		return l_url;
 	}
 
+	/**
+	 * 
+	 * @param ad
+	 *            : 需要通过百度地图API解析的PHIS_HOUSE_KUANXUAN对象
+	 * @return : 连接百度地图API的URL
+	 * @throws Exception
+	 */
 	private URL getURLByStreet(PHIS_HOUSE_KUANXUAN ad) throws Exception {
 		String url = "http://api.map.baidu.com/geocoder/v2/?address="
 				+ URLEncoder.encode(this.city + ad.getHS_REGION_CODE() + ad.getHS_SIT_STREET(), "UTF-8")
@@ -52,6 +71,15 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		return new URL(url);
 	}
 
+	/**
+	 * 
+	 * @param ad
+	 *            : 需要通过百度地图API解析的PHIS_HOUSE_KUANXUAN对象
+	 * @param l_url
+	 *            : 连接百度地图API的URL
+	 * @return : 解析后的PHIS_HOUSE_KUANXUAN对象
+	 * @throws Exception
+	 */
 	private PHIS_HOUSE_KUANXUAN getPoint(PHIS_HOUSE_KUANXUAN ad, URL l_url) throws Exception {// 调用百度地图geocoding服务,将街道地址转换为经纬度
 		InputStream l_urlStream;
 		HttpURLConnection l_connection = (HttpURLConnection) l_url.openConnection();// 打开URL
@@ -62,7 +90,10 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		return GetLocation.getLocationFromAction(str, ad);
 	}
 
-	private void Connect() {// 连接数据库
+	/**
+	 * 连接数据库
+	 */
+	private void Connect() {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");// 加载Oracle驱动程序
 			System.out.println("开始尝试连接数据库！");
@@ -75,6 +106,9 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		}
 	}
 
+	/**
+	 * 查询数据库
+	 */
 	private void Select() {
 		try {
 			System.out.println("连接成功！");
@@ -108,7 +142,12 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		}
 	}
 
-	private void Save(PHIS_HOUSE_KUANXUAN ad) {// 保存数据
+	/**
+	 * 
+	 * @param ad
+	 *            : 需要保存的PHIS_HOUSE_KUANXUAN对象
+	 */
+	private void Save(PHIS_HOUSE_KUANXUAN ad) {
 		try {
 			String sql = "update PHIS_HOUSE_KUANXUAN set LNG = '" + ad.getLNG() + "',LAT = '" + ad.getLAT()
 					+ "' where HS_NUM = '" + ad.getHS_NUM() + "' and HS_COCITY_CODE = '" + ad.getHS_COCITY_CODE() + "'";
@@ -127,6 +166,9 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 		}
 	}
 
+	/**
+	 * 执行地址解析
+	 */
 	public void doChange() {
 		this.Connect();
 		this.Select();

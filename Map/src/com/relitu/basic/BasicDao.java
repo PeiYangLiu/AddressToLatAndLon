@@ -5,7 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import com.relitu.domain.PHIS_HOUSE_ATTRIBUTE_COUNT;
-
+/**
+ * @author : PeiYangLiu
+ * @version: 2.0
+ * @date: 2017/7/13
+ */
 public abstract class BasicDao implements BasicDaoInter {
 	public int num;
 	public Connection con = null;// 创建一个数据库连接

@@ -5,9 +5,9 @@ import com.relitu.factory.DaoFactory;
 
 /**
  * @author : PeiYangLiu
- * @version: 1.0
- * @date: 2017/6/30
- */ 
+ * @version: 2.0
+ * @date: 2017/7/13
+ */
 public class Main {
 	public static void main(String[] args) {
 		DaoFactoryInter factory = new DaoFactory();

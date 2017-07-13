@@ -1,5 +1,9 @@
 package com.relitu.domain;
-
+/**
+ * @author : PeiYangLiu
+ * @version: 2.0
+ * @date: 2017/7/13
+ */
 public class PHIS_HOUSE_KUANXUAN {
 	private String HS_NUM;
 	private String HS_COCITY_CODE;

@@ -3,7 +3,11 @@ package com.relitu.factory;
 import com.relitu.dao.PHIS_HOUSE_ATTRIBUTE_COUNT_Dao;
 import com.relitu.dao.PHIS_HOUSE_KUANXUAN_Dao;
 import com.relitu.dao.factory.inter.DaoFactoryInter;
-
+/**
+ * @author : PeiYangLiu
+ * @version: 2.0
+ * @date: 2017/7/13
+ */
 public class DaoFactory implements DaoFactoryInter {
 	@Override
 	public PHIS_HOUSE_ATTRIBUTE_COUNT_Dao createPHIS_HOUSE_ATTRIBUTE_COUNT_Dao(int num, String city, String user,
