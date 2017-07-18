@@ -2,6 +2,7 @@ package com.relitu.dao.factory.inter;
 
 import com.relitu.dao.PHIS_HOUSE_ATTRIBUTE_COUNT_Dao;
 import com.relitu.dao.PHIS_HOUSE_KUANXUAN_Dao;
+
 /**
  * @author : PeiYangLiu
  * @version: 2.0
@@ -26,5 +27,5 @@ public interface DaoFactoryInter {
 	 * @return : PHIS_HOUSE_KUANXUAN_Dao∂‘œÛ
 	 */
 	public PHIS_HOUSE_KUANXUAN_Dao createPHIS_HOUSE_KUANXUAN_Dao(int num, String city, String user, String password,
-			String sid);
+			String sid, String cityid);
 }

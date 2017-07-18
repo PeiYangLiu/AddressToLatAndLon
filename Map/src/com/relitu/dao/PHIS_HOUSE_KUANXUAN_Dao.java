@@ -34,13 +34,14 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 	 * @param sid
 	 *            : Oracle数据库的SID
 	 */
-	public PHIS_HOUSE_KUANXUAN_Dao(int num, String city, String user, String password, String sid) {
+	public PHIS_HOUSE_KUANXUAN_Dao(int num, String city, String user, String password, String sid, String cityid) {
 		this.num = num;
 		this.city = city;
 		this.Oracle_user = user;
 		this.Oracle_password = password;
 		this.Oracle_sid = sid;
 		this.list = new PHIS_HOUSE_KUANXUAN[num];
+		this.cityid = cityid;
 	}
 
 	/**
@@ -112,7 +113,7 @@ public class PHIS_HOUSE_KUANXUAN_Dao extends BasicDao implements PHIS_HOUSE_KUAN
 	private void Select() {
 		try {
 			System.out.println("连接成功！");
-			String sql = "select HS_SIT,HS_NUM,HS_COCITY_CODE,HS_REGION_CODE,HS_SIT_STREET,HS_SIT_BUILDING from PHIS_HOUSE_KUANXUAN where lng is null and HS_SIT is not null and HS_COCITY_CODE = '440600' and rownum<="
+			String sql = "select HS_SIT,HS_NUM,HS_COCITY_CODE,HS_REGION_CODE,HS_SIT_STREET,HS_SIT_BUILDING from PHIS_HOUSE_KUANXUAN where lng is null and HS_SIT is not null and HS_COCITY_CODE = '"+this.cityid+"' and rownum<="
 					+ num;
 			pre = con.prepareStatement(sql);// 实例化预编译语句
 			result = pre.executeQuery();// 执行查询，注意括号中不需要再加参数
